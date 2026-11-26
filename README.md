@@ -101,7 +101,7 @@ Tool: Claude (Claude Code desktop app). Everything below happened in one working
 
 - **What I asked for:** the corrected metric.
 - **What it gave me:** 5 of 10, with two judgement calls made on my behalf. First, the partner without consent is left out of the headline, even though an anonymous count arguably does not "share" its data. Second, the Not Started partner stays in the denominator. The alternatives are 6 of 11 (55%) with the non-consenting partner, or 5 of 9 (56%) counting only assessed partners.
-- **What I kept, changed or rejected:** [your decision and your reason go here. These are the two calls I would expect to be challenged on in the video.]
+- **What I kept, and why:** I kept both calls, but only after asking the AI to argue both sides of each. Mesa stays out of the funder number: once the CEO says a number to funders it cannot be taken back, so we start with the cautious version and can add Mesa later if its agreement allows. Delta stays in the total: taking it out would raise the figure just because a partner has not been assessed, which rewards delay.
 
 ### A smaller one: the usage claim
 
