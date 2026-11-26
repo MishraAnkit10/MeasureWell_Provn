@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Measure Well: Partner Assessment and Field Coach Dashboard</title>
+<style>
+  @page { size: Letter; margin: 0.4in; }
+  :root {
+    --surface: #ffffff; --panel: #f9f9f7; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+    --hair: #e1e0d9; --axis: #c3c2b7;
+    --good: #0ca30c; --warn: #fab219; --idle: #c3c2b7; --bar: #2a78d6; --crit: #d03b3b;
+  }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--surface); color: var(--ink);
+         font: 11.5px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { width: 7.7in; margin: 0 auto; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  h1 { font-size: 19px; margin: 0; letter-spacing: -0.01em; }
+  h2 { font-size: 13px; margin: 0 0 6px; }
+  h3 { font-size: 11.5px; margin: 0 0 4px; }
+  .eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  .sub { color: var(--ink2); margin: 2px 0 0; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-bottom: 10px; }
+  .head .meta { text-align: right; color: var(--ink2); font-size: 10.5px; }
+  .grid { display: grid; gap: 10px; }
+  .g2 { grid-template-columns: 1.05fr 1fr; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .card { border: 1px solid var(--hair); border-radius: 8px; padding: 10px 14px; background: var(--surface); }
+  .card.soft { background: var(--panel); }
+  .hero { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+  .hero small { font-size: 17px; font-weight: 600; color: var(--ink2); letter-spacing: 0; }
+  .waffle { display: flex; gap: 3px; margin: 10px 0 6px; }
+  .waffle i { flex: 1; height: 22px; border-radius: 4px; }
+  .w-good { background: var(--good); } .w-warn { background: var(--warn); }
+  .w-idle { background: var(--surface); border: 2px dashed var(--axis); }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; color: var(--ink2); font-size: 10.5px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .d-good { background: var(--good); } .d-warn { background: var(--warn); border-radius: 2px; }
+  .d-idle { background: var(--surface); border: 1.5px dashed var(--muted); }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  th { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.final td { font-weight: 700; border-bottom: none; background: var(--panel); }
+  .stat { font-size: 24px; font-weight: 700; line-height: 1.1; }
+  .stat-l { color: var(--ink2); font-size: 10.5px; }
+  .bars { display: grid; grid-template-columns: 178px 1fr 112px; row-gap: 3px; column-gap: 8px; align-items: center; margin-top: 6px; }
+  .bars .nm { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bars .track { height: 12px; border-left: 1px solid var(--axis); }
+  .bars .fill { height: 12px; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 0; }
+  .bars .val { font-size: 10.5px; color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .zero { color: var(--crit); font-weight: 600; }
+  .tag { font-size: 9.5px; border: 1px solid var(--axis); border-radius: 3px; padding: 0 4px; color: var(--ink2); margin-left: 4px; }
+  ol.act { margin: 0; padding-left: 18px; } ol.act li { margin-bottom: 5px; }
+  .note { color: var(--ink2); font-size: 10.5px; }
+  .foot { margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--hair); color: var(--muted); font-size: 10px; }
+  pre { background: var(--panel); border: 1px solid var(--hair); border-radius: 6px; padding: 8px 12px; margin: 4px 0 0;
+        font: 9.2px/1.38 Consolas, "Cascadia Mono", monospace; white-space: pre-wrap; }
+  pre .c { color: #006300; }
+  .mock { border: 2px solid var(--ink); border-radius: 10px; padding: 14px; }
+  .mock .bar { display:flex; justify-content: space-between; border-bottom: 1px solid var(--hair); padding-bottom: 6px; margin-bottom: 10px; }
+  .callout { border-left: 3px solid var(--ink); padding: 2px 0 2px 10px; }
+</style>
+</head>
+<body>
+
+<!-- ============================ PAGE 1: STAFF VIEW ============================ -->
+<section class="page">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Staff view &middot; internal, not for forwarding &middot; CEO weekly</div>
+      <h1>Half of our partners are On Track: 5 of 10</h1>
+    </div>
+    <div class="meta">Source: <b>fct_partner_assessment</b><br>Data as of Monday 6:00 a.m. load</div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow">Partners On Track in their annual assessment</div>
+      <div class="hero" style="margin-top:6px">5 of 10 <small>&nbsp;50%</small></div>
+      <div class="waffle" aria-label="5 On Track, 4 Needs Support, 1 Not Started">
+        <i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i>
+        <i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-idle"></i>
+      </div>
+      <div class="legend">
+        <span class="chip"><span class="dot d-good"></span><b>5</b> On Track</span>
+        <span class="chip"><span class="dot d-warn"></span><b>4</b> Needs Support</span>
+        <span class="chip"><span class="dot d-idle"></span><b>1</b> Not Started</span>
+      </div>
+      <p class="note" style="margin:8px 0 0"><b>Say it as "5 of 10", not just "50%".</b> With ten partners, one
+      partner changing stage moves the figure by ten points. Counted: real partner organizations that have
+      agreed to share their data. Not counted: one partner that has not given consent, and one test record.</p>
+    </div>
+
+    <div class="card soft">
+      <h2>Why 64% and 33% were both wrong</h2>
+      <table>
+        <tr><th>Number</th><th>How it was counted</th><th class="n">Maths</th></tr>
+        <tr><td><b>64%</b><br><span class="note">old dashboard</span></td>
+            <td>Counted every spelling of On Track, including the test record and the partner without consent.
+                Left the Not Started partner out of the total.</td><td class="n">7 of 11</td></tr>
+        <tr><td><b>33%</b><br><span class="note">warehouse pull</span></td>
+            <td>Matched only the exact text "On Track". Missed three real partners typed as
+                "on_track", "ON TRACK" and "on track". Kept the test record.</td><td class="n">4 of 12</td></tr>
+        <tr class="final"><td>50%<br><span class="note">corrected</span></td>
+            <td>All spellings cleaned. Test record removed. Consent required. Not Started stays in the total.</td>
+            <td class="n">5 of 10</td></tr>
+      </table>
+      <p class="note" style="margin:6px 0 0">Going forward this tile reads one tested SQL model. The dashboard tool no longer does its own maths.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div style="display:flex; justify-content:space-between; align-items:baseline">
+      <h2>Field Coach, last 30 days: used heavily by four partners, barely reaching the ones who need it</h2>
+    </div>
+    <div class="grid g3" style="margin:4px 0 8px">
+      <div><div class="stat">9 of 11</div><div class="stat-l">real partners used it at least once</div></div>
+      <div><div class="stat">169 <span style="font-size:13px;font-weight:600;color:var(--ink2)">sessions</span></div>
+           <div class="stat-l">from 27 people. The raw table says 233: 64 of those are one test account.</div></div>
+      <div><div class="stat">72%</div><div class="stat-l">of all sessions come from just four partners</div></div>
+    </div>
+
+    <div class="bars" role="img" aria-label="Sessions per partner in the last 30 days">
+      <div class="nm"><span class="dot d-good"></span> Northside Promise</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="val">42 sessions &middot; 6 people</div>
+      <div class="nm"><span class="dot d-warn"></span> Eastgate Learning</div><div class="track"><div class="fill" style="width:73.8%"></div></div><div class="val">31 sessions &middot; 5 people</div>
+      <div class="nm"><span class="dot d-good"></span> Lakeshore Youth Alliance</div><div class="track"><div class="fill" style="width:64.3%"></div></div><div class="val">27 sessions &middot; 4 people</div>
+      <div class="nm"><span class="dot d-warn"></span> Bayview Family</div><div class="track"><div class="fill" style="width:52.4%"></div></div><div class="val">22 sessions &middot; 4 people</div>
+      <div class="nm"><span class="dot d-good"></span> Mesa Futures<span class="tag">no consent</span></div><div class="track"><div class="fill" style="width:45.2%"></div></div><div class="val">19 sessions &middot; 3 people</div>
+      <div class="nm"><span class="dot d-good"></span> Cedar Valley Partners</div><div class="track"><div class="fill" style="width:28.6%"></div></div><div class="val">12 sessions &middot; 2 people</div>
+      <div class="nm"><span class="dot d-good"></span> Riverbend Cradle2Career</div><div class="track"><div class="fill" style="width:19%"></div></div><div class="val">8 sessions &middot; 1 person</div>
+      <div class="nm"><span class="dot d-warn"></span> Piedmont Rising</div><div class="track"><div class="fill" style="width:11.9%"></div></div><div class="val">5 sessions &middot; 1 person</div>
+      <div class="nm"><span class="dot d-warn"></span> Prairie Pathways</div><div class="track"><div class="fill" style="width:7.1%"></div></div><div class="val">3 sessions &middot; 1 person</div>
+      <div class="nm"><span class="dot d-good"></span> Harbor City Kids</div><div class="track"></div><div class="val zero">0 &middot; never opened</div>
+      <div class="nm"><span class="dot d-idle"></span> Delta Youth Network</div><div class="track"></div><div class="val zero">0 &middot; never opened</div>
+    </div>
+    <div class="legend" style="margin-top:8px">
+      <span class="chip"><span class="dot d-good"></span>On Track</span>
+      <span class="chip"><span class="dot d-warn"></span>Needs Support</span>
+      <span class="chip"><span class="dot d-idle"></span>Not Started</span>
+      <span>Bar length = sessions in 30 days. "no consent" rows are staff-only and never leave this view.</span>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:10px">
+    <div class="card">
+      <h2>Is the Field Coach helping? We cannot say yet.</h2>
+      <p style="margin:0 0 6px">On Track partners averaged <b>18</b> sessions. Needs Support partners averaged <b>15</b>.
+      That gap is too small, across too few partners, in a single snapshot, to credit the tool with anything.
+      Northside (On Track) and Eastgate (Needs Support) are the two heaviest users.</p>
+      <p class="note" style="margin:0">What would answer it: assessment stage tracked over time, and how often staff
+      reviewers approve, edit or reject Field Coach answers. Neither is in this table today.</p>
+    </div>
+    <div class="card soft">
+      <h2>What staff should do this month</h2>
+      <ol class="act">
+        <li><b>Delta Youth Network:</b> no assessment and no Field Coach use. Schedule the assessment kickoff.</li>
+        <li><b>Prairie Pathways and Piedmont Rising:</b> Needs Support, one user each, 8 sessions combined. Call them, do not wait for them to log in.</li>
+        <li><b>The South:</b> three partners, two users, 13 sessions in total. Lowest reach of any region.</li>
+        <li><b>One-person partners</b> (Riverbend, Prairie, Piedmont): get a second person onboarded.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PAGE 2: PARTNER VIEW ============================ -->
+<section class="page">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Partner view &middot; sketch</div>
+      <h1>A partner sees its own row and no other partner by name</h1>
+    </div>
+    <div class="meta">Example shown: Riverbend Cradle2Career<br>logged in as a Riverbend user</div>
+  </div>
+
+  <div class="grid g2">
+    <div class="mock">
+      <div class="bar"><b>Riverbend Cradle2Career</b><span class="note">Updated Monday 6:00 a.m.</span></div>
+      <div class="eyebrow">Your annual assessment</div>
+      <div style="font-size:26px;font-weight:700;margin:2px 0 10px"><span class="dot d-good" style="width:14px;height:14px"></span> On Track</div>
+
+      <div class="eyebrow">Your Field Coach use, last 30 days</div>
+      <div style="margin:2px 0 10px"><span class="stat">8</span> sessions by <span class="stat">1</span> person</div>
+      <p class="note" style="margin:-4px 0 10px">Only one person on your team is using it. Want us to set up a colleague?</p>
+
+      <div class="eyebrow">Across the Measure Well network</div>
+      <div style="margin:2px 0 4px"><span class="stat">5 of 10</span> partners are On Track</div>
+      <div class="waffle" style="margin:4px 0 6px">
+        <i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i>
+        <i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-idle"></i>
+      </div>
+      <p class="note" style="margin:0 0 10px">No partner names. No regional split.</p>
+
+      <div class="eyebrow">Your cohort results</div>
+      <p class="note" style="margin:2px 0 0">Child and family level results are not in this view yet. Ask your program
+      manager for the latest cohort report.</p>
+    </div>
+
+    <div>
+      <div class="card soft" style="margin-bottom:12px">
+        <h2>Two audiences, two rule sets</h2>
+        <table>
+          <tr><th></th><th>Staff view</th><th>Partner view and Field Coach</th></tr>
+          <tr><td><b>Rows</b></td><td>All 11 real partners</td><td>The logged-in partner's own row only</td></tr>
+          <tr><td><b>Consent</b></td><td>Non-consenting partner visible, tagged</td><td>Must have consented, or the row does not exist here</td></tr>
+          <tr><td><b>Other partners</b></td><td>Named, so staff can act</td><td>Never named. One network count only</td></tr>
+          <tr><td><b>Regions</b></td><td>Shown</td><td>Hidden. A region with 2 or 3 partners identifies them</td></tr>
+          <tr><td><b>Test record</b></td><td>Excluded</td><td>Excluded</td></tr>
+          <tr><td><b>Headline metric</b></td><td colspan="2">Same number, same SQL model, for both: 5 of 10</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Deliberate decisions in this sketch</h3>
+        <p class="callout" style="margin:0 0 6px"><b>The partner sees the same network number as the CEO.</b> If the two
+        views could ever disagree, we would be back where we started on Monday.</p>
+        <p class="callout" style="margin:0 0 6px"><b>The view says what it does not have.</b> Riverbend asked the Field Coach
+        about its cohort. This table holds one row per organization, so the honest answer is "not here yet".</p>
+        <p class="callout" style="margin:0"><b>Isolation is enforced in the warehouse,</b> by a row-level rule on
+        partner_id, not by a filter in the dashboard tool that someone can remove.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PAGE 3: SQL + TEST ============================ -->
+<section class="page">
+  <div class="head">
+    <div>
+      <div class="eyebrow">The definition</div>
+      <h1>One query defines the metric, one test guards it</h1>
+    </div>
+    <div class="meta">Run against the 12 Monday rows:<br>returns 10, 5, 4, 1, 0.50</div>
+  </div>
+
+  <h2>(b) Corrected metric: models/metric_partner_on_track.sql</h2>
+  <pre><span class="c">-- "On Track rate" = partners On Track / all real, consenting partner organizations.
+-- This is the only place the metric is computed. Dashboards and the Field Coach read the result.</span>
+with cleaned as (
+    select
+        partner_id,
+        consent_to_share,
+        <span class="c">-- DECISION: fix spelling here, not in each report. Trim, lower-case, and treat "_" as a space,
+        -- so 'on_track', 'ON TRACK' and 'on track' all become 'On Track'.
+        -- Anything unrecognised becomes 'Unmapped' and is NOT quietly counted as anything.</span>
+        case lower(replace(trim(assessment_stage), '_', ' '))
+            when 'on track'      then 'On Track'
+            when 'needs support' then 'Needs Support'
+            when 'not started'   then 'Not Started'
+            else 'Unmapped'
+        end as assessment_stage
+    from fct_partner_assessment            <span class="c">-- in dbt: {{ source('warehouse', 'fct_partner_assessment') }}</span>
+    <span class="c">-- DECISION: remove test records by ID from a reviewed list (a dbt seed in production), not by
+    -- guessing from the name. The ticket asks the loader owner for a proper is_test flag.</span>
+    where partner_id not in ('P-010')
+),
+shareable as (
+    <span class="c">-- DECISION: the CEO quotes this number to funders, so it is an external number.
+    -- Consent is required. Mesa Futures (consent = false) is left out. Needs CAIDO approval.</span>
+    select * from cleaned where consent_to_share = true
+)
+select
+    count(*)                                                             as partners_in_scope,       <span class="c">-- 10</span>
+    sum(case when assessment_stage = 'On Track'      then 1 else 0 end)  as partners_on_track,       <span class="c">-- 5</span>
+    sum(case when assessment_stage = 'Needs Support' then 1 else 0 end)  as partners_needs_support,  <span class="c">-- 4</span>
+    sum(case when assessment_stage = 'Not Started'   then 1 else 0 end)  as partners_not_started,    <span class="c">-- 1</span>
+    <span class="c">-- DECISION: Not Started stays in the denominator. Dropping it (as the old dashboard did)
+    -- makes the network look better simply because a partner has not been assessed.</span>
+    round(1.0 * sum(case when assessment_stage = 'On Track' then 1 else 0 end)
+              / nullif(count(*), 0), 4)                                  as on_track_rate            <span class="c">-- 0.50</span>
+from shareable</pre>
+
+  <h2 style="margin-top:10px">(c) The test that would have caught it: models/schema.yml</h2>
+  <pre>sources:
+  - name: warehouse
+    tables:
+      - name: fct_partner_assessment
+        columns:
+          - name: assessment_stage
+            tests:
+              - not_null
+              <span class="c"># DECISION: test the RAW column, before cleaning. On Monday's data this fails on 3 rows:
+              # P-002 'on_track', P-004 'ON TRACK', P-009 'on track'. Those three rows are the whole
+              # gap between the warehouse pull (4 On Track) and reality (7 rows marked On Track).
+              # Severity is "warn" on the raw source, because we do not own the loader and must not
+              # block the nightly run; the same test on the cleaned model is "error", so an
+              # 'Unmapped' value stops the dashboard from publishing a wrong number.</span>
+              - accepted_values:
+                  values: ['On Track', 'Needs Support', 'Not Started']
+                  config:
+                    severity: warn</pre>
+
+  <div class="grid g2" style="margin-top:10px">
+    <div class="card soft">
+      <h3>Two more tests I would add next</h3>
+      <p style="margin:0">1. No row with consent_to_share = false, and no test record, exists in the view the partner
+      dashboard and Field Coach read. 2. On Track + Needs Support + Not Started = partners in scope.</p>
+    </div>
+    <div class="card soft">
+      <h3>How this was checked</h3>
+      <p style="margin:0">The query above was run on the 12 rows in SQLite. The old dashboard logic reproduces 7 of 11
+      and the exact-match pull reproduces 4 of 12, so both disputed numbers are explained row by row.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
