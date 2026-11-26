@@ -81,7 +81,7 @@ I would prove it with a test user, at three levels, and I would first prove the 
 
 ## Section C: AI Usage Log
 
-Tool: Claude (Claude Code desktop app). Everything below happened in one working session.
+Tool: an AI coding assistant. Interactions 1 and 2 happened in one working session, Interaction 3 in a second.
 
 ### Interaction 1: Scoping the deliverable
 
