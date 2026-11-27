@@ -73,8 +73,8 @@
   ol.act li::marker { color: var(--good); font-weight: 700; }
   .note { color: var(--ink2); font-size: 10.5px; }
   .foot { margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--hair); color: var(--muted); font-size: 10px; }
-  pre { background: var(--panel); border: 1px solid var(--hair); border-radius: 6px; padding: 8px 12px; margin: 4px 0 0;
-        font: 9.2px/1.38 Consolas, "Cascadia Mono", monospace; white-space: pre-wrap; color: var(--ink); }
+  pre { background: var(--panel); border: 1px solid var(--hair); border-radius: 6px; padding: 6px 12px; margin: 4px 0 0;
+        font: 8.8px/1.25 Consolas, "Cascadia Mono", monospace; white-space: pre-wrap; color: var(--ink); }
   pre .c { color: #7a2aa0; }   /* comments: derived from brand purple, darker for contrast */
   .mock { border: 2px solid var(--deep); border-radius: 10px; padding: 14px; }
   .mock .bar { display:flex; justify-content: space-between; border-bottom: 1px solid var(--hair); padding-bottom: 6px; margin-bottom: 10px; }
@@ -248,7 +248,7 @@
       <div class="eyebrow">The definition</div>
       <h1>One query defines the metric, one test guards it</h1>
     </div>
-    <div class="meta">Run against the 12 Monday rows:<br>returns 10, 5, 4, 1, 0.50</div>
+    <div class="meta">Run against the 12 Monday rows:<br>returns 10, 5, 4, 1, 0, 0.50</div>
   </div>
 
   <h2>(b) Corrected metric: models/metric_partner_on_track.sql</h2>
@@ -260,7 +260,8 @@ with cleaned as (
         consent_to_share,
         <span class="c">-- DECISION: fix spelling here, not in each report. Trim, lower-case, and treat "_" as a space,
         -- so 'on_track', 'ON TRACK' and 'on track' all become 'On Track'.
-        -- Anything unrecognised becomes 'Unmapped' and is NOT quietly counted as anything.</span>
+        -- Anything unrecognised becomes 'Unmapped'. It stays in the total, because it is still a partner,
+        -- and the test on this model stops the run while any exist.</span>
         case lower(replace(trim(assessment_stage), '_', ' '))
             when 'on track'      then 'On Track'
             when 'needs support' then 'Needs Support'
@@ -282,13 +283,14 @@ select
     sum(case when assessment_stage = 'On Track'      then 1 else 0 end)  as partners_on_track,       <span class="c">-- 5</span>
     sum(case when assessment_stage = 'Needs Support' then 1 else 0 end)  as partners_needs_support,  <span class="c">-- 4</span>
     sum(case when assessment_stage = 'Not Started'   then 1 else 0 end)  as partners_not_started,    <span class="c">-- 1</span>
+    sum(case when assessment_stage = 'Unmapped'      then 1 else 0 end)  as partners_unmapped,       <span class="c">-- 0, must stay 0</span>
     <span class="c">-- DECISION: Not Started stays in the denominator. Dropping it (as the old dashboard did)
     -- makes the network look better simply because a partner has not been assessed.</span>
     round(1.0 * sum(case when assessment_stage = 'On Track' then 1 else 0 end)
               / nullif(count(*), 0), 4)                                  as on_track_rate            <span class="c">-- 0.50</span>
 from shareable</pre>
 
-  <h2 style="margin-top:10px">(c) The test that would have caught it: models/schema.yml</h2>
+  <h2 style="margin-top:8px">(c) The test that would have caught it: models/schema.yml</h2>
   <pre>sources:
   - name: warehouse
     tables:
@@ -298,27 +300,30 @@ from shareable</pre>
             tests:
               - not_null
               <span class="c"># DECISION: test the RAW column, before cleaning. On Monday's data this fails on 3 rows:
-              # P-002 'on_track', P-004 'ON TRACK', P-009 'on track'. Those three rows are the whole
-              # gap between the warehouse pull (4 On Track) and reality (7 rows marked On Track).
-              # Severity is "warn" on the raw source, because we do not own the loader and must not
-              # block the nightly run; the same test on the cleaned model is "error", so an
-              # 'Unmapped' value stops the dashboard from publishing a wrong number.</span>
+              # P-002 'on_track', P-004 'ON TRACK', P-009 'on track': the rows the 33% pull missed.
+              # Severity is "warn" because we do not own the loader and must not block the nightly
+              # run. The test that blocks is on the model, below.</span>
               - accepted_values:
                   values: ['On Track', 'Needs Support', 'Not Started']
                   config:
-                    severity: warn</pre>
+                    severity: warn
 
-  <div class="grid g2" style="margin-top:10px">
-    <div class="card soft">
-      <h3>Two more tests I would add next</h3>
-      <p style="margin:0">1. No row with consent_to_share = false, and no test record, exists in the view the partner
-      dashboard and Field Coach read. 2. On Track + Needs Support + Not Started = partners in scope.</p>
-    </div>
-    <div class="card soft">
-      <h3>How this was checked</h3>
-      <p style="margin:0">The query above was run on the 12 rows in SQLite. The old dashboard logic reproduces 7 of 11
-      and the exact-match pull reproduces 4 of 12, so both disputed numbers are explained row by row.</p>
-    </div>
+models:
+  - name: metric_partner_on_track
+    columns:
+      - name: partners_unmapped
+        tests:
+          <span class="c"># DECISION: severity "error" (the default). If any stage spelling is not recognised,
+          # the run fails before the dashboard updates, so a wrong number is never published.</span>
+          - accepted_values:
+              values: [0]
+              quote: false</pre>
+
+  <div class="card soft" style="margin-top:8px; padding:8px 14px">
+      <p style="margin:0 0 4px"><b>How this was checked.</b> Run on the 12 rows in SQLite: the old dashboard logic gives 7 of 11,
+      the exact-match pull 4 of 12. With one stage misspelled on purpose, partners_unmapped becomes 1 and the model test fails.</p>
+      <p style="margin:0"><b>One more test I would add next.</b> No row with consent_to_share = false, and no test record, exists
+      in the view the partner dashboard and Field Coach read.</p>
   </div>
 </section>
 
