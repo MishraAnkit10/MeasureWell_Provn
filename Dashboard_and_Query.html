@@ -49,6 +49,7 @@
   .waffle i { flex: 1; height: 22px; border-radius: 4px; }
   .w-good { background: var(--good); } .w-warn { background: var(--warn); box-shadow: inset 0 0 0 1px var(--warn-edge); }
   .w-idle { background: var(--surface); border: 2px dashed var(--axis); }
+  .w-rest { background: var(--hair); }   /* partner view: not On Track, no breakdown */
   .legend { display: flex; gap: 14px; flex-wrap: wrap; color: var(--ink2); font-size: 10.5px; }
   .chip { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
   .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
@@ -88,7 +89,7 @@
   <div class="head">
     <div>
       <div class="eyebrow">Staff view &middot; internal, not for forwarding &middot; CEO weekly</div>
-      <h1>Half of our partners are On Track: 5 of 10</h1>
+      <h1>5 of the 10 partners who share data are On Track</h1>
     </div>
     <div class="meta">Source: <b>fct_partner_assessment</b><br>Data as of Monday 6:00 a.m. load</div>
   </div>
@@ -203,12 +204,12 @@
       <p class="note" style="margin:-4px 0 10px">Only one person on your team is using it. Want us to set up a colleague?</p>
 
       <div class="eyebrow">Across the Measure Well network</div>
-      <div style="margin:2px 0 4px"><span class="stat">5 of 10</span> partners are On Track</div>
+      <div style="margin:2px 0 4px"><span class="stat">5 of 10</span> partners who share data are On Track</div>
       <div class="waffle" style="margin:4px 0 6px">
         <i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i><i class="w-good"></i>
-        <i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-warn"></i><i class="w-idle"></i>
+        <i class="w-rest"></i><i class="w-rest"></i><i class="w-rest"></i><i class="w-rest"></i><i class="w-rest"></i>
       </div>
-      <p class="note" style="margin:0 0 10px">No partner names. No regional split.</p>
+      <p class="note" style="margin:0 0 10px">No partner names, no regional split, and no breakdown of the other five.</p>
 
       <div class="eyebrow">Your cohort results</div>
       <p class="note" style="margin:2px 0 0">Child and family level results are not in this view yet. Ask your program
