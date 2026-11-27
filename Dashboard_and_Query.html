@@ -157,7 +157,7 @@
       <span class="chip"><span class="dot d-good"></span>On Track</span>
       <span class="chip"><span class="dot d-warn"></span>Needs Support</span>
       <span class="chip"><span class="dot d-idle"></span>Not Started</span>
-      <span>Bar length = sessions in 30 days. "no consent" rows are staff-only and never leave this view.</span>
+      <span>Bar length = sessions in 30 days. "no consent" rows are for staff only and never leave this view.</span>
     </div>
   </div>
 
@@ -175,8 +175,8 @@
       <ol class="act">
         <li><b>Delta Youth Network:</b> no assessment and no Field Coach use. Schedule the assessment kickoff.</li>
         <li><b>Prairie Pathways and Piedmont Rising:</b> Needs Support, one user each, 8 sessions combined. Call them, do not wait for them to log in.</li>
-        <li><b>The South:</b> three partners, two users, 13 sessions in total. Lowest reach of any region.</li>
-        <li><b>One-person partners</b> (Riverbend, Prairie, Piedmont): get a second person onboarded.</li>
+        <li><b>Harbor City Kids:</b> On Track, but never opened the Field Coach. Ask if they need help starting.</li>
+        <li><b>Partners with one user</b> (Riverbend, Prairie, Piedmont): get a second person onboarded.</li>
       </ol>
     </div>
   </div>
@@ -220,8 +220,8 @@
         <h2>Two audiences, two rule sets</h2>
         <table>
           <tr><th></th><th>Staff view</th><th>Partner view and Field Coach</th></tr>
-          <tr><td><b>Rows</b></td><td>All 11 real partners</td><td>The logged-in partner's own row only</td></tr>
-          <tr><td><b>Consent</b></td><td>Non-consenting partner visible, tagged</td><td>Must have consented, or the row does not exist here</td></tr>
+          <tr><td><b>Rows</b></td><td>All 11 real partners</td><td>Only its own row</td></tr>
+          <tr><td><b>Consent</b></td><td>Partner without consent visible, tagged</td><td>Must have consented, or the row does not exist here</td></tr>
           <tr><td><b>Other partners</b></td><td>Named, so staff can act</td><td>Never named. One network count only</td></tr>
           <tr><td><b>Regions</b></td><td>Shown</td><td>Hidden. A region with 2 or 3 partners identifies them</td></tr>
           <tr><td><b>Test record</b></td><td>Excluded</td><td>Excluded</td></tr>
@@ -234,8 +234,8 @@
         views could ever disagree, we would be back where we started on Monday.</p>
         <p class="callout" style="margin:0 0 6px"><b>The view says what it does not have.</b> Riverbend asked the Field Coach
         about its cohort. This table holds one row per organization, so the honest answer is "not here yet".</p>
-        <p class="callout" style="margin:0"><b>Isolation is enforced in the warehouse,</b> by a row-level rule on
-        partner_id, not by a filter in the dashboard tool that someone can remove.</p>
+        <p class="callout" style="margin:0"><b>The lock is in the warehouse,</b> by a rule that returns only the partner's own row,
+        not by a filter in the dashboard tool that someone can remove.</p>
       </div>
     </div>
   </div>
@@ -258,7 +258,7 @@ with cleaned as (
     select
         partner_id,
         consent_to_share,
-        <span class="c">-- DECISION: fix spelling here, not in each report. Trim, lower-case, and treat "_" as a space,
+        <span class="c">-- DECISION: fix spelling here, not in each report. Trim, lowercase, and treat "_" as a space,
         -- so 'on_track', 'ON TRACK' and 'on track' all become 'On Track'.
         -- Anything unrecognised becomes 'Unmapped'. It stays in the total, because it is still a partner,
         -- and the test on this model stops the run while any exist.</span>
@@ -322,7 +322,7 @@ models:
 
   <div class="card soft" style="margin-top:8px; padding:8px 14px">
       <p style="margin:0 0 4px"><b>How this was checked.</b> Run on the 12 rows in SQLite: the old dashboard logic gives 7 of 11,
-      the exact-match pull 4 of 12. With one stage misspelled on purpose, partners_unmapped becomes 1 and the model test fails.</p>
+      the exact text pull 4 of 12. With one stage misspelled on purpose, partners_unmapped becomes 1 and the model test fails.</p>
       <p style="margin:0"><b>One more test I would add next.</b> No row with consent_to_share = false, and no test record, exists
       in the view the partner dashboard and Field Coach read.</p>
   </div>

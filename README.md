@@ -6,7 +6,7 @@ Companion to `Dashboard_and_Query.pdf`. Data: `fct_partner_assessment`, Monday 6
 
 ## Section A: Reconciliation & Recommendation
 
-**Why the numbers differ.** Both are wrong. The dashboard's 64% is 7 of 11. It counted every spelling of On Track, including a test record and a non-consenting partner, and dropped the Not Started partner from the total. The warehouse pull's 33% is 4 of 12. It matched only the exact text "On Track", missing three real partners entered as "on_track", "ON TRACK" and "on track", and kept the test record.
+**Why the numbers differ.** Both are wrong. The dashboard's 64% is 7 of 11. It counted every spelling of On Track, including a test record and the partner without consent, and dropped the Not Started partner from the total. The warehouse pull's 33% is 4 of 12. It matched only the exact text "On Track", missing three real partners entered as "on_track", "ON TRACK" and "on track", and kept the test record.
 
 **What the CEO should quote on Friday: "5 of the 10 partners who share data with us are On Track."** It means: five were On Track in their annual assessment on Monday. Four need support and one has not started. Say the count, not only "50%". One partner changing stage moves the figure ten points.
 
@@ -14,9 +14,9 @@ Companion to `Dashboard_and_Query.pdf`. Data: `fct_partner_assessment`, Monday 6
 
 **I decided:** one tested SQL model defines the metric and the dashboard reads it; spellings are cleaned in the model; the test record is excluded; Not Started stays in the denominator; the CEO hears today that 64% must not be quoted, and gets 5 of 10 once approved.
 
-**Needs CAIDO approval:** leaving the non-consenting partner out of the funder number (including it gives 6 of 11); pausing Field Coach expansion until the Section B fixes land; how Mesa is told, if Field Coach Answer 1 was sent.
+**Needs CAIDO approval:** leaving the partner without consent out of the funder number (including it gives 6 of 11); pausing Field Coach expansion until the Section B fixes land; how Mesa is told, if Field Coach Answer 1 was sent.
 
-**Ticket to the implementation partner:** make `assessment_stage` a fixed pick-list and add an `is_test` flag.
+**Ticket to the implementation partner:** make `assessment_stage` a fixed pick list and add an `is_test` flag.
 
 **Two questions I expect from the executive director**
 
@@ -37,11 +37,11 @@ What went wrong:
 1. **It named other partners.** Lakeshore Youth Alliance and Mesa Futures are identified with their status. Mesa Futures has `consent_to_share = false`. This is a privacy breach, not a wording problem. If this answer was sent, Mesa must be told before Friday. Who tells them, and how, needs CAIDO approval.
 2. **It did not answer the question.** Riverbend asked about its cohort, meaning its children and families. The Coach answered with the organization's own stage. The table has one row per organization and no cohort data, so the honest answer is "I do not have that."
 3. **It quoted 64%,** the number we have just retired.
-4. **The geography is wrong.** Riverbend is in the South. "A great sign for the Midwest and West" has nothing to do with the partner asking.
+4. **The regions add nothing, and they point to partners.** Riverbend is in the South. "A great sign for the Midwest and West" has nothing to do with the partner asking. With only two to four partners per region, naming a region narrows down who is meant.
 
 Fix at the source, not in the prompt:
 
-- The Coach reads only a consent-gated view (`consent_to_share = true`, test records removed), through a warehouse row-level rule that returns only the row whose `partner_id` matches the logged-in partner. It cannot leak a name it never receives.
+- The Coach reads only partners who have consented (`consent_to_share = true`), with test records removed. A rule in the warehouse returns only the row whose `partner_id` matches the partner who is signed in. It cannot leak a name it never receives.
 - Network context comes from one place: the single row in `metric_partner_on_track` (5 of 10). No names, no regional split, because a region with two or three partners identifies them.
 - When the data to answer is not there, the Coach says so and points to the program manager.
 
@@ -75,7 +75,7 @@ I would prove it with a test user, at three levels, and I would first prove the 
 5. **Prove the test bites.** Run the same script once with the access rule switched off. Canary B's values must appear and the test must fail. A test that cannot fail proves nothing.
 6. **Keep it running.** The script runs nightly and before any new partner is onboarded. A failure blocks rollout.
 
-**Is the Field Coach safe to put in front of more partners?** Not yet. Keep it running for current partners with human review. Expand once the consent-gated view, the row-level rule and the canary test are in place and passing.
+**Is the Field Coach safe to put in front of more partners?** Not yet. Keep it running for current partners with human review. Expand once the consent check, the warehouse access rule and the canary test are in place and passing.
 
 ---
 
@@ -99,5 +99,5 @@ Tool: an AI coding assistant.
 ### Interaction 3: Which number goes to funders
 
 - **What I asked for:** the corrected metric.
-- **What it gave me:** 5 of 10, with two judgement calls made on my behalf. First, the partner without consent is left out of the headline, even though an anonymous count arguably does not "share" its data. Second, the Not Started partner stays in the denominator. The alternatives are 6 of 11 (55%) with the non-consenting partner, or 5 of 9 (56%) counting only assessed partners.
+- **What it gave me:** 5 of 10, with two judgement calls made on my behalf. First, the partner without consent is left out of the headline, even though an anonymous count arguably does not "share" its data. Second, the Not Started partner stays in the denominator. The alternatives are 6 of 11 (55%) with the partner without consent, or 5 of 9 (56%) counting only assessed partners.
 - **What I kept, and why:** I kept both calls, but only after asking the AI to argue both sides of each. Mesa stays out of the funder number: once the CEO says a number to funders it cannot be taken back, so we start with the cautious version and can add Mesa later if its agreement allows. Delta stays in the total: taking it out would raise the figure just because a partner has not been assessed, which rewards delay.
