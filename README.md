@@ -87,7 +87,7 @@ Tool: an AI coding assistant. Interactions 1 and 2 happened in one working sessi
 
 - **What I asked for:** I gave the AI the full challenge brief and let it start.
 - **What it gave me:** It began building a nine-file dbt project: a staging model, a separate consent view, a metric model, a schema file, three stand-alone tests and two seed files.
-- **What I rejected, and why:** I stopped it before the files were written and pointed it at the actual submission spec: one document with a dashboard, one query and one test, plus a three-section README. Nine files is more surface to defend at a 9:00 a.m. meeting and does nothing for a CEO or an executive director. The brief rewards a clear story, not a large repository.
+- **What I rejected, and why:** I rejected all nine file writes before any were saved, then sent the AI the submission requirements: one document with a dashboard, one query and one test. The nine files were not what the submission asked for.
 - **What I kept:** the idea of a consent gate that sits between the staff layer and anything partner-facing. It survives as the `shareable` step in the single query.
 
 ### Interaction 2: Explaining 64% versus 33%
