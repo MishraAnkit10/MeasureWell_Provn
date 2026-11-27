@@ -86,9 +86,8 @@ Tool: an AI coding assistant. Interactions 1 and 2 happened in one working sessi
 ### Interaction 1: Scoping the deliverable
 
 - **What I asked for:** I gave the AI the full challenge brief and let it start.
-- **What it gave me:** It began building a nine-file dbt project: a staging model, a separate consent view, a metric model, a schema file, three stand-alone tests and two seed files.
-- **What I rejected, and why:** I rejected all nine file writes before any were saved, then sent the AI the submission requirements: one document with a dashboard, one query and one test. The nine files were not what the submission asked for.
-- **What I kept:** the idea of a consent gate that sits between the staff layer and anything partner-facing. It survives as the `shareable` step in the single query.
+- **What it gave me:** It began building a full dbt project, with several models, a schema file, separate tests and seed files.
+- **What I rejected, and why:** I rejected the file writes before any were saved, then sent the AI the submission requirements: one document with a dashboard, one query and one test. A full project was not what the submission asked for.
 
 ### Interaction 2: Explaining 64% versus 33%
 
