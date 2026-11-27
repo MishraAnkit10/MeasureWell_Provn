@@ -81,7 +81,7 @@ I would prove it with a test user, at three levels, and I would first prove the 
 
 ## Section C: AI Usage Log
 
-Tool: an AI coding assistant. Interactions 1 and 2 happened in one working session, Interaction 3 in a second.
+Tool: an AI coding assistant.
 
 ### Interaction 1: Scoping the deliverable
 
@@ -94,14 +94,10 @@ Tool: an AI coding assistant. Interactions 1 and 2 happened in one working sessi
 - **What I asked for:** I had already worked out why the two numbers differ. I asked the AI to check my reasoning, as quality control.
 - **What it gave me:** it loaded the 12 rows into SQLite and ran the old dashboard logic, the exact text pull and the corrected query. Output: 7 of 11 (64%), 4 of 12 (33%), and 5 On Track of 10 partners in scope.
 - **What I kept:** my own explanation, now confirmed row by row.
-- **What I changed:** nothing. In a second session I had every number checked against the table again, and all of them matched.
+- **What I changed:** nothing. I had every number checked against the table again, and all of them matched.
 
 ### Interaction 3: Which number goes to funders
 
 - **What I asked for:** the corrected metric.
 - **What it gave me:** 5 of 10, with two judgement calls made on my behalf. First, the partner without consent is left out of the headline, even though an anonymous count arguably does not "share" its data. Second, the Not Started partner stays in the denominator. The alternatives are 6 of 11 (55%) with the non-consenting partner, or 5 of 9 (56%) counting only assessed partners.
 - **What I kept, and why:** I kept both calls, but only after asking the AI to argue both sides of each. Mesa stays out of the funder number: once the CEO says a number to funders it cannot be taken back, so we start with the cautious version and can add Mesa later if its agreement allows. Delta stays in the total: taking it out would raise the figure just because a partner has not been assessed, which rewards delay.
-
-### A smaller one: the usage claim
-
-- The AI's first framing of the usage data compared average sessions by stage (18 versus 15). I kept the numbers but the dashboard states plainly that they do not show the Field Coach is helping: 11 partners, one snapshot, no history. The headline finding is about reach, not impact.
