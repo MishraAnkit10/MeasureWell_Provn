@@ -290,8 +290,9 @@ select
               / nullif(count(*), 0), 4)                                  as on_track_rate            <span class="c">-- 0.50</span>
 from shareable</pre>
 
-  <h2 style="margin-top:8px">(c) The test that would have caught it: models/schema.yml</h2>
-  <pre>sources:
+  <h2 style="margin-top:8px">(c) The test that would have caught the 33%: models/schema.yml</h2>
+  <pre><span class="c"># The 64% was a different problem: the dashboard did its own maths. The model above, which it now reads, fixes that.</span>
+sources:
   - name: warehouse
     tables:
       - name: fct_partner_assessment
