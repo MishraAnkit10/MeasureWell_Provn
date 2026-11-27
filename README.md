@@ -42,7 +42,7 @@ What went wrong:
 Fix at the source, not in the prompt:
 
 - The Coach reads only partners who have consented (`consent_to_share = true`), with test records removed. A rule in the warehouse returns only the row whose `partner_id` matches the partner who is signed in. It cannot leak a name it never receives.
-- Network context comes from one place: the single row in `metric_partner_on_track` (5 of 10). No names, no regional split, because a region with two or three partners identifies them.
+- Network context comes from one place: the single row in `metric_partner_on_track` (5 of 10). The Coach receives only `partners_on_track` and `partners_in_scope` from that row, not the breakdown. No names, no regional split, because a region with two or three partners identifies them.
 - When the data to answer is not there, the Coach says so and points to the program manager.
 
 ### Answer 2: Eastgate, "Why are we marked Needs Support?"
