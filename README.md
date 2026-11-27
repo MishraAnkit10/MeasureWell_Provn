@@ -8,7 +8,7 @@ Companion to `Dashboard_and_Query.pdf`. Data: `fct_partner_assessment`, Monday 6
 
 **Why the numbers differ.** Both are wrong. The dashboard's 64% is 7 of 11. It counted every spelling of On Track, including a test record and a non-consenting partner, and dropped the Not Started partner from the total. The warehouse pull's 33% is 4 of 12. It matched only the exact text "On Track", missing three real partners entered as "on_track", "ON TRACK" and "on track", and kept the test record.
 
-**What the CEO should quote on Friday: "5 of 10 partner organizations are On Track."** It means: of the ten real partners that consented to sharing, five were On Track in their annual assessment on Monday. Four need support and one has not started. Say the count, not only "50%". One partner changing stage moves the figure ten points.
+**What the CEO should quote on Friday: "5 of the 10 partners who share data with us are On Track."** It means: five were On Track in their annual assessment on Monday. Four need support and one has not started. Say the count, not only "50%". One partner changing stage moves the figure ten points.
 
 **What staff should do this month.** Start Delta Youth Network's assessment (not started, zero Field Coach use). Call Prairie Pathways and Piedmont Rising: both Needs Support, one user each, 8 sessions combined. Do not claim the Field Coach is working: average use by stage (18 versus 15 sessions) proves nothing.
 
