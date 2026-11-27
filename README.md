@@ -89,12 +89,12 @@ Tool: an AI coding assistant. Interactions 1 and 2 happened in one working sessi
 - **What it gave me:** It began building a full dbt project, with several models, a schema file, separate tests and seed files.
 - **What I rejected, and why:** I rejected the file writes before any were saved, then sent the AI the submission requirements: one document with a dashboard, one query and one test. A full project was not what the submission asked for.
 
-### Interaction 2: Explaining 64% versus 33%
+### Interaction 2: Checking my explanation of 64% versus 33%
 
-- **What I asked for:** why two numbers from the same table disagree.
-- **What it gave me:** a row-level account. 64% is 7 of 11 and 33% is 4 of 12. It did not stop at the explanation: it loaded the 12 rows into SQLite and ran the old dashboard logic, the exact-match pull and the corrected query. Output: (7, 11), (4, 12), and 10 partners in scope with 5 On Track.
-- **What I kept:** the arithmetic, because it reproduces both disputed numbers exactly. An explanation that only produced the "right" answer and could not reproduce the two wrong ones would not have been enough to take into the room.
-- **What I changed:** [confirm against your own row-by-row check before submitting]
+- **What I asked for:** I had already worked out why the two numbers differ. I asked the AI to check my reasoning, as quality control.
+- **What it gave me:** it loaded the 12 rows into SQLite and ran the old dashboard logic, the exact text pull and the corrected query. Output: 7 of 11 (64%), 4 of 12 (33%), and 5 On Track of 10 partners in scope.
+- **What I kept:** my own explanation, now confirmed row by row.
+- **What I changed:** nothing. In a second session I had every number checked against the table again, and all of them matched.
 
 ### Interaction 3: Which number goes to funders
 
