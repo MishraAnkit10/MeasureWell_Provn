@@ -16,7 +16,7 @@ Companion to `Dashboard_and_Query.pdf`. Data: `fct_partner_assessment`, Monday 6
 
 **Needs CAIDO approval:** leaving the non-consenting partner out of the funder number (including it gives 6 of 11); pausing Field Coach expansion until the Section B fixes land; telling the CEO before Friday that 64% is retired; how Mesa is told, if Field Coach Answer 1 was sent.
 
-**Ticket to the implementation partner:** make `assessment_stage` a fixed pick-list, add an `is_test` flag, and stop sending blank regions.
+**Ticket to the implementation partner:** make `assessment_stage` a fixed pick-list and add an `is_test` flag.
 
 **Two questions I expect from the executive director**
 
