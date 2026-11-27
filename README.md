@@ -8,13 +8,13 @@ Companion to `Dashboard_and_Query.pdf`. Data: `fct_partner_assessment`, Monday 6
 
 **Why the numbers differ.** Both are wrong. The dashboard's 64% is 7 of 11. It counted every spelling of On Track, including a test record and a non-consenting partner, and dropped the Not Started partner from the total. The warehouse pull's 33% is 4 of 12. It matched only the exact text "On Track", missing three real partners entered as "on_track", "ON TRACK" and "on track", and kept the test record.
 
-**What the CEO should quote on Friday: "5 of 10 partner organizations are On Track."** It means: of the ten real partners that consented to sharing, five were rated On Track in their annual assessment as of Monday. Four need support and one has not started. Say the count, not only "50%". One partner changing stage moves the figure ten points.
+**What the CEO should quote on Friday: "5 of 10 partner organizations are On Track."** It means: of the ten real partners that consented to sharing, five were On Track in their annual assessment on Monday. Four need support and one has not started. Say the count, not only "50%". One partner changing stage moves the figure ten points.
 
-**What staff should do this month.** Start Delta Youth Network's assessment (not started, zero Field Coach use). Call Prairie Pathways and Piedmont Rising: both Needs Support, one user each, 8 sessions combined. Do not claim the Field Coach is working. On Track partners average 18 sessions and Needs Support partners 15, which proves nothing.
+**What staff should do this month.** Start Delta Youth Network's assessment (not started, zero Field Coach use). Call Prairie Pathways and Piedmont Rising: both Needs Support, one user each, 8 sessions combined. Do not claim the Field Coach is working: average use by stage (18 versus 15 sessions) proves nothing.
 
-**I decided:** one tested SQL model defines the metric and the dashboard reads it; spellings are cleaned in the model; the test record is excluded; Not Started stays in the denominator.
+**I decided:** one tested SQL model defines the metric and the dashboard reads it; spellings are cleaned in the model; the test record is excluded; Not Started stays in the denominator; the CEO hears today that 64% must not be quoted, and gets 5 of 10 once approved.
 
-**Needs CAIDO approval:** leaving the non-consenting partner out of the funder number (including it gives 6 of 11); pausing Field Coach expansion until the Section B fixes land; telling the CEO before Friday that 64% is retired; how Mesa is told, if Field Coach Answer 1 was sent.
+**Needs CAIDO approval:** leaving the non-consenting partner out of the funder number (including it gives 6 of 11); pausing Field Coach expansion until the Section B fixes land; how Mesa is told, if Field Coach Answer 1 was sent.
 
 **Ticket to the implementation partner:** make `assessment_stage` a fixed pick-list and add an `is_test` flag.
 
